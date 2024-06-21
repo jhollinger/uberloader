@@ -44,6 +44,8 @@ Cons:
 * Monkeypatching of `ActiveRecord::Relation` and probably `ActiveRecord::Associations::Preloader`.
 
 ```ruby
+require 'uberloader/activerecord'
+
 widgets = Widget.all.
   uberload(:category).
   uberload(:parts, scope: Part.active) do |u|

@@ -2,8 +2,8 @@ require 'active_record'
 
 module Uberloader
   autoload :Context, 'uberloader/context'
+  autoload :Collection, 'uberloader/collection'
   autoload :Uberload, 'uberloader/uberload'
-  autoload :Uberloadable, 'uberloader/uberloadable'
   autoload :Query, 'uberloader/query'
   autoload :Version, 'uberloader/version'
 

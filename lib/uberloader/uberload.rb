@@ -1,30 +1,43 @@
 module Uberloader
   class Uberload
-    include Uberloadable
-
-    attr_reader :name
-
     def initialize(context, name, scope: nil, &block)
-      @name = name
       @context = context
+      @name = name
       @scopes = scope ? [scope] : []
-      @uberloads = []
-      @context.using(self, &block) if block
+      @children = Collection.new(context, &block)
+      self.block(&block) if block
     end
 
-    def preload!(parent_records)
-      Preloader.call(parent_records, @name, scoped)
+    def uberload(association, scope: nil, &block)
+      @children.add(association, scope: scope, &block)
+      self
+    end
+
+    def scope(q)
+      @scopes << q
+      self
+    end
+
+    def block(&block)
+      @context.using(self, &block)
+    end
+
+    def preload!(parent_records, strict_loading = false)
+      # Load @name into parent records
+      scoped = @scopes.reduce { |acc, scope| acc.merge scope }
+      scope = strict_loading ? scoped&.strict_loading || ::ActiveRecord::Relation::StrictLoadingScope : scoped
+      Preloader.call(parent_records, @name, scope)
+
+      # Load child records into @name
       records = parent_records.each_with_object([]) { |parent, acc|
         acc.concat Array(parent.public_send @name)
       }
-      @uberloads.each { |p| p.preload! records } if records.any?
+      @children.preload! records, strict_loading if records.any?
     end
 
     def to_h
       h = {}
-      h[@name] = @uberloads.reduce({}) { |acc, p|
-        acc.merge p.to_h
-      }
+      h[@name] = @children.to_h
       h
     end
   end

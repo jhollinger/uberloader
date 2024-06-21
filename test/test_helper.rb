@@ -1,6 +1,6 @@
 require 'json'
 require 'uberloader'
-require 'active_record'
+require 'uberloader/activerecord'
 require 'minitest/autorun'
 
 Dir.glob('./test/support/*.rb').each { |file| require file }
