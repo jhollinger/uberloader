@@ -8,7 +8,7 @@ Nested preloads use blocks. Custom scopes may be given as args and/or as method 
 widgets = Widget
   .where(category_id: category_ids)
   .uberload(:category)
-  .uberload(:parts, Part.order(:name)) do |u|
+  .uberload(:parts, scope: Part.order(:name)) do |u|
     u.uberload(:manufacturer)
     u.uberload(:subparts) do
       u.scope my_subparts_scope_helper
@@ -31,7 +31,7 @@ When `uberload` is used, `preload` and `includes` are de-duped. The following wi
 ```ruby
 widgets = Widget
   .preload(:parts)
-  .uberload(:parts, Part.order(:name))
+  .uberload(:parts, scope: Part.order(:name))
 ```
 
 ## Testing

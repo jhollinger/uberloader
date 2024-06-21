@@ -5,7 +5,7 @@ module Uberloader
       # Uberload an association.
       #
       #   Category.
-      #     uberload(:widget, Widget.order(:name)) { |u|
+      #     uberload(:widget, scope: Widget.order(:name)) { |u|
       #       u.uberload(:parts) {
       #         u.scope Part.active
       #         u.uberload(:foo)
@@ -17,8 +17,8 @@ module Uberloader
       # @yield [Uberloader::Context] Optional Block to customize scope or add child associations
       # @return [ActiveRecord::Relation]
       #
-      def uberload(association, scope = nil, &block)
-        all.uberload(association, scope, &block)
+      def uberload(association, scope: nil, &block)
+        all.uberload(association, scope: scope, &block)
       end
     end
 
@@ -27,7 +27,7 @@ module Uberloader
       # Uberload an association.
       #
       #   Category.all.
-      #     uberload(:widget, Widget.order(:name)) { |u|
+      #     uberload(:widget, scope: Widget.order(:name)) { |u|
       #       u.uberload(:parts) {
       #         u.scope Part.active
       #         u.uberload(:foo)
@@ -39,14 +39,14 @@ module Uberloader
       # @yield [Uberloader::Context] Optional Block to customize scope or add child associations
       # @return [ActiveRecord::Relation]
       #
-      def uberload(association, scope = nil, &block)
-        spawn.uberload!(association, scope, &block)
+      def uberload(association, scope: nil, &block)
+        spawn.uberload!(association, scope: scope, &block)
       end
 
       # See uberload
-      def uberload!(association, scope = nil, &block)
+      def uberload!(association, scope: nil, &block)
         @values[:uberloads] ||= Collection.new(Context.new)
-        @values[:uberloads].add(association, scope, &block)
+        @values[:uberloads].add(association, scope: scope, &block)
         self
       end
 

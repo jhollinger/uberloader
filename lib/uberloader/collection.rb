@@ -11,7 +11,7 @@ module Uberloader
     # Uberload an association.
     #
     #   Category.all.
-    #     uberload(:widget, Widget.order(:name)) { |u|
+    #     uberload(:widget, scope: Widget.order(:name)) { |u|
     #       u.uberload(:parts) {
     #         u.scope Part.active
     #         u.uberload(:foo)
@@ -23,7 +23,7 @@ module Uberloader
     # @yield [Uberloader::Context] Optional Block to customize scope or add child associations
     # @return [Uberloader::Uberload]
     #
-    def add(association, scope = nil, &block)
+    def add(association, scope: nil, &block)
       u = @uberloads[association] ||= Uberload.new(@context, association)
       u.scope scope if scope
       u.block(&block) if block

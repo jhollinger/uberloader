@@ -13,7 +13,7 @@ class ActiverecordTest < Minitest::Test
 
   def test_nested_queries
     widgets = Widget.all
-      .uberload(:category, Category.order(:name)) { |u|
+      .uberload(:category, scope: Category.order(:name)) { |u|
         u.uberload(:widgets) {
           u.scope Widget.where.not(id: 256)
           u.uberload(:detail)
@@ -33,7 +33,7 @@ class ActiverecordTest < Minitest::Test
   def test_merges_with_preloads
     widgets = Widget.all
       .preload(category: {widgets: :detail})
-      .uberload(:category, Category.order(:name))
+      .uberload(:category, scope: Category.order(:name))
       .to_a
 
     assert widgets[0].category.widgets.loaded?
@@ -48,7 +48,7 @@ class ActiverecordTest < Minitest::Test
   def test_merges_with_includes
     widgets = Widget.all
       .includes(category: {widgets: :detail})
-      .uberload(:category, Category.order(:name))
+      .uberload(:category, scope: Category.order(:name))
       .to_a
 
     assert widgets[0].category.widgets.loaded?

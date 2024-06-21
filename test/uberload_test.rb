@@ -13,7 +13,7 @@ class QueryTest < Minitest::Test
   end
 
   def test_initialize
-    uberload = Uberloader::Uberload.new(@context, :widgets, Widget.order(:name))
+    uberload = Uberloader::Uberload.new(@context, :widgets, scope: Widget.order(:name))
     uberload.uberload! Category.all.to_a
 
     assert_equal [
@@ -37,7 +37,7 @@ class QueryTest < Minitest::Test
   def test_uberload
     uberload = Uberloader::Uberload.new(@context, :widgets)
     uberload.uberload(:detail)
-    uberload.uberload(:line_items, LineItem.order(amount: :desc))
+    uberload.uberload(:line_items, scope: LineItem.order(amount: :desc))
     uberload.uberload! Category.all.to_a
 
     assert_equal [

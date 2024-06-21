@@ -13,7 +13,7 @@ class CollectionTest < Minitest::Test
   end
 
   def test_add
-    @collection.add(:widgets, Widget.where.not(name: "Foo"))
+    @collection.add(:widgets, scope: Widget.where.not(name: "Foo"))
     @collection.add(:widgets) do |u|
       u.scope Widget.order(:name)
       u.scope Widget.where.not(category_id: 200)

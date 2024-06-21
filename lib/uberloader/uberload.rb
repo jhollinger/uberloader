@@ -10,7 +10,7 @@ module Uberloader
     # @param scope [ActiveRecord::Relation] optional scope to apply to the association's query
     # @yield [Uberloader::Context] Optional block to customize scope or add child associations
     #
-    def initialize(context, name, scope = nil, &block)
+    def initialize(context, name, scope: nil, &block)
       @context = context
       @name = name
       @scopes = scope ? [scope] : []
@@ -22,7 +22,7 @@ module Uberloader
     # Uberload an association.
     #
     #   Category.all.
-    #     uberload(:widget, Widget.order(:name)) { |u|
+    #     uberload(:widget, scope: Widget.order(:name)) { |u|
     #       u.uberload(:parts) {
     #         u.scope Part.active
     #         u.uberload(:foo)
@@ -34,8 +34,8 @@ module Uberloader
     # @yield [Uberloader::Context] Optional block to customize scope or add child associations
     # @return [Uberloader::Uberload]
     #
-    def uberload(association, scope = nil, &block)
-      @children.add(association, scope, &block)
+    def uberload(association, scope: nil, &block)
+      @children.add(association, scope: scope, &block)
       self
     end
 
