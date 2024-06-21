@@ -1,12 +1,14 @@
 module Uberloader
-  class Preload
-    include Preloadable
+  class Uberload
+    include Uberloadable
+
+    attr_reader :name
 
     def initialize(context, name, scope: nil, &block)
       @name = name
       @context = context
       @scopes = scope ? [scope] : []
-      @preloads = []
+      @uberloads = []
       @context.using(self, &block) if block
     end
 
@@ -15,7 +17,15 @@ module Uberloader
       records = parent_records.each_with_object([]) { |parent, acc|
         acc.concat Array(parent.public_send @name)
       }
-      @preloads.each { |p| p.preload! records } if records.any?
+      @uberloads.each { |p| p.preload! records } if records.any?
+    end
+
+    def to_h
+      h = {}
+      h[@name] = @uberloads.reduce({}) { |acc, p|
+        acc.merge p.to_h
+      }
+      h
     end
   end
 end

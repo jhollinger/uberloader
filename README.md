@@ -20,11 +20,11 @@ Cons:
 ```ruby
 widgets = Uberloader.
   query(Widgets.all).
-  preload(:category).
-  preload(:parts, scope: Part.active) do |u|
-    u.preload(:subparts) do
+  uberload(:category).
+  uberload(:parts, scope: Part.active) do |u|
+    u.uberload(:subparts) do
       u.scope my_subparts_scope_helper
-      u.preload(:foo)
+      u.uberload(:foo)
     end
   end.
   to_a

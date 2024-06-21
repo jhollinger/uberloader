@@ -18,9 +18,9 @@ class QueryTest < Minitest::Test
   def test_preloading
     categories = Uberloader
       .query(Category.order(:name))
-      .preload(:widgets) { |u|
+      .uberload(:widgets) { |u|
         u.scope Widget.where.not(name: nil)
-        u.preload(:line_items)
+        u.uberload(:line_items)
       }
       .to_a
 
@@ -39,9 +39,9 @@ class QueryTest < Minitest::Test
     categories = []
     Uberloader
       .query(Category.order(:name))
-      .preload(:widgets) { |u|
+      .uberload(:widgets) { |u|
         u.scope Widget.where.not(name: nil)
-        u.preload(:line_items)
+        u.uberload(:line_items)
       }
       .find_in_batches { |records| categories.concat records }
 
@@ -58,9 +58,9 @@ class QueryTest < Minitest::Test
     categories = []
     Uberloader
       .query(Category.order(:name))
-      .preload(:widgets) { |u|
+      .uberload(:widgets) { |u|
         u.scope Widget.where.not(name: nil)
-        u.preload(:line_items)
+        u.uberload(:line_items)
       }
       .find_each { |record| categories << record }
 
@@ -71,5 +71,16 @@ class QueryTest < Minitest::Test
     ], @queries.map(&:first)
 
     assert_equal Category.order(:id).pluck(:name), categories.map(&:name)
+  end
+
+  def test_to_h
+    uberload = Uberloader::Uberload.new(Uberloader::Context.new, :widgets) { |u|
+      u.scope Widget.where.not(name: nil)
+      u.uberload(:line_items)
+      u.uberload(:category) {
+        u.uberload(:children)
+      }
+    }
+    assert_equal({:widgets=>{:line_items=>{}, :category=>{:children=>{}}}}, uberload.to_h)
   end
 end

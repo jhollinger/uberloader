@@ -4,17 +4,17 @@ module Uberloader
   class Context
     extend Forwardable
 
-    def initialize(preloadable)
-      @preloadable = preloadable
+    def initialize(uberloadable = nil)
+      @uberloadable = uberloadable
     end
 
-    def using(preloadable)
-      prev = @preloadable
-      @preloadable = preloadable
+    def using(uberloadable)
+      prev = @uberloadable
+      @uberloadable = uberloadable
       yield self
-      @preloadable = prev
+      @uberloadable = prev
     end
 
-    def_delegators :@preloadable, :scope, :preload
+    def_delegators :@uberloadable, :scope, :uberload
   end
 end
