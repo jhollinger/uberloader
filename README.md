@@ -24,7 +24,7 @@ widgets = Widget
 
 ## Status
 
-Uberloader is an attempt to bring [ideas from OccamsRecord](https://github.com/jhollinger/occams-record/?tab=readme-ov-file#advanced-eager-loading) deeper into ActiveRecord, making them easier to use in existing applications.
+Uberloader is an attempt to bring [ideas from OccamsRecord](https://github.com/jhollinger/occams-record/?tab=readme-ov-file#advanced-eager-loading) deeper into ActiveRecord, making them easier to use in existing applications. It's usable in production, but note that monkeypatches `ActiveRecord::Relation#preload_associations`. YMMV if other gems monkeypatch this method.
 
 ## Interaction with preload and includes
 
