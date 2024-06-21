@@ -8,12 +8,20 @@ module Uberloader
     end
 
     #
-    # Add or update an association.
+    # Uberload an association.
     #
-    # @param association [Symbol] Name of the association to preload
-    # @param scope [ActiveRecord::Relation] Optional custom scope
-    # @yield [Uberloader::Context] Optional block to customize scope or add child associations
-    # @return Uberloader::Uberload
+    #   Category.all.
+    #     uberload(:widget, Widget.order(:name)) { |u|
+    #       u.uberload(:parts) {
+    #         u.scope Part.active
+    #         u.uberload(:foo)
+    #       }
+    #     }
+    #
+    # @param association [Symbol] Name of the association
+    # @param scope [ActiveRecord::Relation] Optional scope to apply to the association's query
+    # @yield [Uberloader::Context] Optional Block to customize scope or add child associations
+    # @return [Uberloader::Uberload]
     #
     def add(association, scope = nil, &block)
       u = @uberloads[association] ||= Uberload.new(@context, association)
@@ -42,10 +50,13 @@ module Uberloader
       end
     end
 
+    # Load @uberloads into records
     def uberload!(records, strict_loading = false)
       @uberloads.each_value { |u| u.uberload!(records, strict_loading) }
     end
 
+    # Returns a nested Hash of the uberloaded associations
+    # @return [Hash]
     def to_h
       @uberloads.each_value.reduce({}) { |acc, u|
         acc.merge u.to_h

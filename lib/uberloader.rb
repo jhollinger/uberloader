@@ -15,5 +15,5 @@ module Uberloader
     end
 end
 
-ActiveRecord::Relation.send(:prepend, Uberloader::QueryMethods)
+ActiveRecord::Relation.send(:prepend, Uberloader::QueryMethods::InstanceMethods)
 ActiveRecord::Base.extend(Uberloader::QueryMethods::Delegates)
