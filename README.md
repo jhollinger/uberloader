@@ -33,3 +33,29 @@ widgets = Widget
   .preload(:parts)
   .uberload(:parts, Part.order(:name))
 ```
+
+## Testing
+
+Testing is fully scripted under the `bin/` directory. Appraisal is used to test against various ActiveRecord versions, and Docker or Podman is used to test against various Ruby versions. The combinations to test are defined in `test/matrix`.
+
+```bash
+# Run all tests
+bin/testall
+
+# Filter tests
+bin/testall ruby-3.3
+bin/testall ar-7.1
+bin/testall ruby-3.3 ar-7.1
+
+# Run one specific line from test/matrix
+bin/test ruby-3.3 ar-7.1 sqlite3
+
+# Run a specific file
+bin/test ruby-3.3 ar-7.1 sqlite3 test/uberload_test.rb
+
+# Run a specific test
+bin/test ruby-3.3 ar-7.1 sqlite3 N=test_add_preload_values
+
+# Use podman
+PODMAN=1 bin/testall
+```

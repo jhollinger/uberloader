@@ -1,5 +1,5 @@
 function podpose {
-  if [[ -n "${OCCAMS_PODMAN-}" ]]; then
+  if [[ -n "${PODMAN-}" ]]; then
     podman-compose "$@"
   else
     docker compose "$@"
