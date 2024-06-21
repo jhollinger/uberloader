@@ -49,19 +49,21 @@ class QueryTest < Minitest::Test
   end
 
   def test_uberload_with_polymorphic
-    line_items =LineItem.all.to_a
+    line_items = LineItem.all.to_a
     uberload = Uberloader::Uberload.new(@context, :item) { |u|
       u.uberload(:category)
     }
     uberload.uberload! line_items
 
     refute_nil line_items[0].item
-    assert_equal [
-      'SELECT "line_items".* FROM "line_items"',
-      'SELECT "widgets".* FROM "widgets" WHERE "widgets"."id" IN (?, ?, ?)',
-      'SELECT "splines".* FROM "splines" WHERE "splines"."id" IN (?, ?)',
-      'SELECT "categories".* FROM "categories" WHERE "categories"."id" IN (?, ?)',
-    ], @queries.map(&:first)
+    assert_equal [].tap { |x|
+      x << 'SELECT "line_items".* FROM "line_items"'
+      x << 'SELECT "widgets".* FROM "widgets" WHERE "widgets"."id" IN (?, ?, ?)'
+      x << 'SELECT "splines".* FROM "splines" WHERE "splines"."id" IN (?, ?)'
+      x << 'SELECT "categories".* FROM "categories" WHERE "categories"."id" IN (?, ?)'
+      # AR 6.x has a bug in polymorphic relationships causing 1 query per type
+      x << 'SELECT "categories".* FROM "categories" WHERE "categories"."id" IN (?, ?)' if ActiveRecord::VERSION::MAJOR < 7
+    }, @queries.map(&:first)
   end
 
   def test_scope
