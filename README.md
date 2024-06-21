@@ -2,7 +2,7 @@
 
 Uberloader brings [OccamsRecord-style](https://github.com/jhollinger/occams-record/?tab=readme-ov-file#advanced-eager-loading) preloading directly to ActiveRecord.
 
-Nested preloading is accomplished using blocks. Custom scopes may be given as args and/or as method calls inside a block.
+Nested preloads use blocks. Custom scopes may be given as args and/or as method calls inside a block.
 
 ```ruby
 widgets = Widget.all.
