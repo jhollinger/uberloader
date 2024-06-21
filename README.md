@@ -5,9 +5,10 @@ Uberloader brings [OccamsRecord-style](https://github.com/jhollinger/occams-reco
 Nested preloads use blocks. Custom scopes may be given as args and/or as method calls inside a block.
 
 ```ruby
-widgets = Widget.all.
-  uberload(:category).
-  uberload(:parts, Part.order(:name)) do |u|
+widgets = Widget
+  .where(category_id: category_ids)
+  .uberload(:category)
+  .uberload(:parts, Part.order(:name)) do |u|
     u.uberload(:manufacturer)
     u.uberload(:subparts) do
       u.scope my_subparts_scope_helper
