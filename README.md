@@ -1,15 +1,17 @@
 # Uberloader
 
-Uberloader brings [OccamsRecord-style](https://github.com/jhollinger/occams-record/?tab=readme-ov-file#advanced-eager-loading) preloading directly to ActiveRecord.
-
-Nested preloads use blocks. Custom scopes may be given as args and/or as method calls inside a block.
+Uberloader is a new way of preloading associations in ActiveRecord. Nested preloads use blocks. Custom scopes may be given as args and/or as method calls inside a block.
 
 ```ruby
 widgets = Widget
   .where(category_id: category_ids)
+  # Preload category
   .uberload(:category)
+  # Preload parts, ordered by name
   .uberload(:parts, scope: Part.order(:name)) do |u|
+    # Preload the parts' manufacturer
     u.uberload(:manufacturer)
+    # and their subparts, using a custom scope
     u.uberload(:subparts) do
       u.scope my_subparts_scope_helper
 
@@ -22,7 +24,7 @@ widgets = Widget
 
 ## Status
 
-Uberloader is **currently an experiment**, albiet a promising one. The hope is to have a well-tested gem published sometime in Summer 2024.
+Uberloader is an attempt to bring [ideas from OccamsRecord](https://github.com/jhollinger/occams-record/?tab=readme-ov-file#advanced-eager-loading) deeper into ActiveRecord, making them easier to use in existing applications.
 
 ## Interaction with preload and includes
 
