@@ -15,7 +15,7 @@ module Uberloader
       records = parent_records.each_with_object([]) { |parent, acc|
         acc.concat Array(parent.public_send @name)
       }
-      @preloads.each { |p| p.preload! records }
+      @preloads.each { |p| p.preload! records } if records.any?
     end
   end
 end

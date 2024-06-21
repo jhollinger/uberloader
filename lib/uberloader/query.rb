@@ -12,7 +12,7 @@ module Uberloader
 
     def to_a
       records = @relation.to_a
-      @preloads.each { |p| p.preload! records }
+      @preloads.each { |p| p.preload! records } if records.any?
       records
     end
 
