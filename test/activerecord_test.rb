@@ -72,4 +72,15 @@ class ActiverecordTest < Minitest::Test
       'SELECT "line_items".* FROM "line_items" WHERE "line_items"."item_type" = ? AND "line_items"."item_id" IN (?, ?, ?, ?, ?, ?, ?)',
     ], @queries[1..].map(&:first)
   end
+
+  def test_foo
+    categories = Category.
+      uberload(:widgets, scope: Widget.order(name: :asc)).
+      uberload(:desc_widgets, from: :widgets, scope: Widget.order(name: :desc)).
+      to_a
+    puts categories[0].widgets.map(&:name)
+    puts "---"
+    puts categories[0].desc_widgets.map(&:name)
+    puts @queries.map(&:first)
+  end
 end

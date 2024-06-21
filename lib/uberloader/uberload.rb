@@ -8,11 +8,13 @@ module Uberloader
     # @param context [Uberloader::Context]
     # @param name [Symbol] Name of the association
     # @param scope [ActiveRecord::Relation] optional scope to apply to the association's query
+    # @param from [Symbol] The real association if "name" is fake
     # @yield [Uberloader::Context] Optional block to customize scope or add child associations
     #
-    def initialize(context, name, scope: nil, &block)
+    def initialize(context, name, scope: nil, from: nil, &block)
       @context = context
       @name = name
+      @from = from
       @scopes = scope ? [scope] : []
       @children = Collection.new(context)
       self.block(&block) if block
@@ -31,11 +33,12 @@ module Uberloader
     #
     # @param association [Symbol] Name of the association
     # @param scope [ActiveRecord::Relation] Optional scope to apply to the association's query
+    # @param from [Symbol] The real association if "association" is fake
     # @yield [Uberloader::Context] Optional block to customize scope or add child associations
     # @return [Uberloader::Uberload]
     #
-    def uberload(association, scope: nil, &block)
-      @children.add(association, scope: scope, &block)
+    def uberload(association, scope: nil, from: nil, &block)
+      @children.add(association, scope: scope, from: from, &block)
       self
     end
 
@@ -63,7 +66,11 @@ module Uberloader
     end
 
     # Load @children into records
-    def uberload!(parent_records, strict_loading = false)
+    def uberload!(raw_parent_records, strict_loading = false)
+      return if raw_parent_records.empty?
+
+      parent_records = @from ? subclassed_records(raw_parent_records) : raw_parent_records
+
       # Load @name into parent records
       Preloader.call(parent_records, @name, scoped(strict_loading))
 
@@ -93,6 +100,34 @@ module Uberloader
       elsif defined? ::ActiveRecord::Relation::StrictLoadingScope
         ::ActiveRecord::Relation::StrictLoadingScope
       end
+    end
+
+    def subclassed_records(records)
+      model = records[0].class
+      ref = model.reflections.fetch(@from.to_s)
+      name = @name
+
+      submodel = Class.new(model) do
+        def self.name
+          superclass.name
+        end
+
+        send ref.macro, name, ref.scope, **{
+          class_name: ref.klass.name,
+          primary_key: ref.klass.primary_key,
+          foreign_key: ref.foreign_key,
+        }.merge(ref.options)
+      end
+
+      records.map { |record|
+        x = submodel.new(record.attributes)
+        record.instance_eval do
+          (class << self; self; end).class_eval do
+            define_method(name) { x.send name }
+          end
+        end
+        x
+      }
     end
   end
 end

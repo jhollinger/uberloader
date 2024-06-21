@@ -20,11 +20,12 @@ module Uberloader
     #
     # @param association [Symbol] Name of the association
     # @param scope [ActiveRecord::Relation] Optional scope to apply to the association's query
+    # @param from [Symbol] The real association if "association" is fake
     # @yield [Uberloader::Context] Optional Block to customize scope or add child associations
     # @return [Uberloader::Uberload]
     #
-    def add(association, scope: nil, &block)
-      u = @uberloads[association] ||= Uberload.new(@context, association)
+    def add(association, scope: nil, from: nil, &block)
+      u = @uberloads[association] ||= Uberload.new(@context, association, from: from)
       u.scope scope if scope
       u.block(&block) if block
       u

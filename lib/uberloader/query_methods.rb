@@ -14,11 +14,12 @@ module Uberloader
       #
       # @param association [Symbol] Name of the association
       # @param scope [ActiveRecord::Relation] Optional scope to apply to the association's query
+      # @param from [Symbol] The real association if "name" is fake
       # @yield [Uberloader::Context] Optional Block to customize scope or add child associations
       # @return [ActiveRecord::Relation]
       #
-      def uberload(association, scope: nil, &block)
-        all.uberload(association, scope: scope, &block)
+      def uberload(association, scope: nil, from: nil, &block)
+        all.uberload(association, scope: scope, from: from, &block)
       end
     end
 
@@ -36,17 +37,18 @@ module Uberloader
       #
       # @param association [Symbol] Name of the association
       # @param scope [ActiveRecord::Relation] Optional scope to apply to the association's query
+      # @param from [Symbol] The real association if "name" is fake
       # @yield [Uberloader::Context] Optional Block to customize scope or add child associations
       # @return [ActiveRecord::Relation]
       #
-      def uberload(association, scope: nil, &block)
-        spawn.uberload!(association, scope: scope, &block)
+      def uberload(association, scope: nil, from: nil, &block)
+        spawn.uberload!(association, scope: scope, from: from, &block)
       end
 
       # See uberload
-      def uberload!(association, scope: nil, &block)
+      def uberload!(association, scope: nil, from: nil, &block)
         @values[:uberloads] ||= Collection.new(Context.new)
-        @values[:uberloads].add(association, scope: scope, &block)
+        @values[:uberloads].add(association, scope: scope, from: from, &block)
         self
       end
 
