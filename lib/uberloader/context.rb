@@ -5,11 +5,6 @@ module Uberloader
   class Context
     extend Forwardable
 
-    # @param uberload [Uberloader::Uberload]
-    def initialize(uberload = nil)
-      @uberload = uberload
-    end
-
     #
     # Set a new context and evaluate the block.
     #
