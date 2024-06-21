@@ -1,4 +1,4 @@
-# Uberloaderer
+# Uberloader
 
 Uberloader is an EXPERIMENT for brining [OccamsRecord-style](https://github.com/jhollinger/occams-record/?tab=readme-ov-file#advanced-eager-loading) preloading directly to ActiveRecord.
 
