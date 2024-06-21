@@ -12,16 +12,6 @@ class CollectionTest < Minitest::Test
     clear_queries
   end
 
-  def test_to_h
-    @collection.add(:widgets) { |u|
-      u.uberload(:line_items)
-      u.uberload(:category) {
-        u.uberload(:children)
-      }
-    }
-    assert_equal({:widgets=>{:line_items=>{}, :category=>{:children=>{}}}}, @collection.to_h)
-  end
-
   def test_add
     @collection.add(:widgets, Widget.where.not(name: "Foo"))
     @collection.add(:widgets) do |u|
@@ -41,6 +31,16 @@ class CollectionTest < Minitest::Test
   def test_add_preload_values
     @collection.add_preload_values(:widgets)
     @collection.add_preload_values({widgets: [:line_items, {category: :children}]})
+    assert_equal({:widgets=>{:line_items=>{}, :category=>{:children=>{}}}}, @collection.to_h)
+  end
+
+  def test_to_h
+    @collection.add(:widgets) { |u|
+      u.uberload(:line_items)
+      u.uberload(:category) {
+        u.uberload(:children)
+      }
+    }
     assert_equal({:widgets=>{:line_items=>{}, :category=>{:children=>{}}}}, @collection.to_h)
   end
 end

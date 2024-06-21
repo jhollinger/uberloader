@@ -59,4 +59,17 @@ class ActiverecordTest < Minitest::Test
       'SELECT "widget_details".* FROM "widget_details" WHERE "widget_details"."widget_id" IN (?, ?, ?, ?, ?, ?, ?)',
     ], @queries.map(&:first)
   end
+
+  def test_works_with_eager_load
+    widgets = Widget.all
+      .eager_load(:category)
+      .uberload(:line_items)
+      .to_a
+
+    assert !widgets[0].category.nil?
+    assert widgets[0].line_items.loaded?
+    assert_equal [
+      'SELECT "line_items".* FROM "line_items" WHERE "line_items"."item_type" = ? AND "line_items"."item_id" IN (?, ?, ?, ?, ?, ?, ?)',
+    ], @queries[1..].map(&:first)
+  end
 end
