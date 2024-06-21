@@ -48,6 +48,22 @@ class QueryTest < Minitest::Test
     ], @queries.map(&:first)
   end
 
+  def test_uberload_with_polymorphic
+    line_items =LineItem.all.to_a
+    uberload = Uberloader::Uberload.new(@context, :item) { |u|
+      u.uberload(:category)
+    }
+    uberload.uberload! line_items
+
+    refute_nil line_items[0].item
+    assert_equal [
+      'SELECT "line_items".* FROM "line_items"',
+      'SELECT "widgets".* FROM "widgets" WHERE "widgets"."id" IN (?, ?, ?)',
+      'SELECT "splines".* FROM "splines" WHERE "splines"."id" IN (?, ?)',
+      'SELECT "categories".* FROM "categories" WHERE "categories"."id" IN (?, ?)',
+    ], @queries.map(&:first)
+  end
+
   def test_scope
     uberload = Uberloader::Uberload.new(@context, :widgets)
     uberload.scope Widget.where(name: "Foo")
