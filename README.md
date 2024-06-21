@@ -38,7 +38,7 @@ widgets = Widget
 
 ## Testing
 
-Testing is fully scripted under the `bin/` directory. Appraisal is used to test against various ActiveRecord versions, and Docker or Podman is used to test against various Ruby versions. The combinations to test are defined in `test/matrix`.
+Testing is fully scripted under the `bin/` directory. Appraisal is used to test against various ActiveRecord versions, and Docker or Podman is used to test against various Ruby versions. The combinations to test are defined in [test/matrix](https://github.com/jhollinger/uberloader/blob/main/test/matrix).
 
 ```bash
 # Run all tests
