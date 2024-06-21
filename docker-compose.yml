@@ -1,5 +1,5 @@
 ---
-version: '3'
+version: "3"
 services:
   ruby-3.3:
     build:
@@ -8,13 +8,6 @@ services:
     volumes:
       - ./:/srv
       - ruby-3.3-gems:/usr/local/bundle
-    depends_on:
-      postgres-14:
-        condition: service_healthy
-      postgres-10:
-        condition: service_healthy
-      mysql-8:
-        condition: service_healthy
 
   ruby-3.2:
     build:
@@ -23,13 +16,6 @@ services:
     volumes:
       - ./:/srv
       - ruby-3.2-gems:/usr/local/bundle
-    depends_on:
-      postgres-14:
-        condition: service_healthy
-      postgres-10:
-        condition: service_healthy
-      mysql-8:
-        condition: service_healthy
 
   ruby-3.1:
     build:
@@ -38,13 +24,6 @@ services:
     volumes:
       - ./:/srv
       - ruby-3.1-gems:/usr/local/bundle
-    depends_on:
-      postgres-14:
-        condition: service_healthy
-      postgres-10:
-        condition: service_healthy
-      mysql-8:
-        condition: service_healthy
 
   ruby-3.0:
     build:
@@ -53,55 +32,8 @@ services:
     volumes:
       - ./:/srv
       - ruby-3.0-gems:/usr/local/bundle
-    depends_on:
-      postgres-14:
-        condition: service_healthy
-      postgres-10:
-        condition: service_healthy
-      mysql-8:
-        condition: service_healthy
-
-  postgres-14:
-    image: postgres:14.8
-    environment:
-      - POSTGRES_HOST_AUTH_METHOD=trust
-      - POSTGRES_PASSWORD
-    volumes:
-      - postgres-14:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  postgres-10:
-    image: postgres:10.23-bullseye
-    environment:
-      - POSTGRES_HOST_AUTH_METHOD=trust
-      - POSTGRES_PASSWORD
-    volumes:
-      - postgres-10:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  mysql-8:
-    image: mysql:8.0
-    environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD=1
-    volumes:
-      - mysql-8:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      timeout: 20s
-      retries: 10
 
 volumes:
-  postgres-14:
-  postgres-10:
-  mysql-8:
   ruby-3.3-gems:
   ruby-3.2-gems:
   ruby-3.1-gems:

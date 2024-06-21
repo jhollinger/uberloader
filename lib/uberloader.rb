@@ -4,7 +4,7 @@ module Uberloader
   autoload :Context, 'uberloader/context'
   autoload :Collection, 'uberloader/collection'
   autoload :Uberload, 'uberloader/uberload'
-  autoload :Query, 'uberloader/query'
+  autoload :QueryMethods, 'uberloader/query_methods'
   autoload :Version, 'uberloader/version'
 
   autoload :Preloader,
@@ -13,8 +13,7 @@ module Uberloader
     when 6 then 'uberloader/preloader/v6'
     else raise "Unsupported ActiveRecord version"
     end
-
-  def self.query(relation)
-    Query.new(relation)
-  end
 end
+
+ActiveRecord::Relation.send(:prepend, Uberloader::QueryMethods)
+ActiveRecord::Base.extend(Uberloader::QueryMethods::Delegates)
