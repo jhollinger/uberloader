@@ -24,7 +24,7 @@ widgets = Widget
 
 Uberloader is **currently an experiment**, albiet a promising one. The hope is to have a well-tested gem published sometime in Summer 2024.
 
-## Interaction with `preload` and `includes`
+## Interaction with preload and includes
 
 When `uberload` is used, `preload` and `includes` are de-duped. The following will result in **one** query for `parts`, ordered by name:
 
