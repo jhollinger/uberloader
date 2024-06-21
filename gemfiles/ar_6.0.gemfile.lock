@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    uber-loader (0.0.1)
+    uberloader (0.0.1)
       activerecord (>= 6.0, < 7.2)
 
 GEM
@@ -58,7 +58,7 @@ DEPENDENCIES
   otr-activerecord (~> 2.1.1)
   rake
   sqlite3 (~> 1.4.2)
-  uber-loader!
+  uberloader!
 
 BUNDLED WITH
    2.5.6
