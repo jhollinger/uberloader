@@ -93,7 +93,6 @@ module Uberloader
       elsif defined? ::ActiveRecord::Relation::StrictLoadingScope
         ::ActiveRecord::Relation::StrictLoadingScope
       end
-     # scope = strict_loading ? q&.strict_loading || ::ActiveRecord::Relation::StrictLoadingScope : q
     end
   end
 end
