@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+cd $(dirname $0)/../
+source bin/lib.sh
+
+
+if [[ $# -ne 3 ]]; then
+  >&2 echo "usage: $(basename $0) 7.1  7.1.3.4  0.1.0"
+  exit 1
+fi
+
+appraised_version=$1
+ar_version=$2
+ul_version=$3
+
+[[ $ul_version == HEAD ]] && suffix="-repo" || suffix=""
+
+docker run --rm $(compat_image_name ${appraised_version}${suffix}) bash -c "
+  set -euo pipefail
+
+  gemfile=gemfiles/ar_${appraised_version}.gemfile
+
+  # install the right version of ActiveRecord
+  sed -i 's/gem \"activerecord\".*/gem \"activerecord\", \"'$ar_version'\"/' \$gemfile
+  if ! grep $ar_version \$gemfile; then
+    echo \"Could not find activerecord $ar_version in \$gemfile\"
+    exit 1
+  fi
+
+  # Install the right version of uberloader
+  if [[ $ul_version != HEAD ]]; then
+    sed -i 's/^gemspec .*/gem \"uberloader\", \"'$ul_version'\"/' \$gemfile
+  fi
+
+  bundle exec appraisal ar-${appraised_version} bundle install
+  bundle exec appraisal ar-${appraised_version} rake test
+"

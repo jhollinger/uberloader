@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+cd $(dirname $0)/../
+source bin/lib.sh
+
+# Run tests
+bin/testall-compatibility
+
+# Generate table
+bin/generate-version-test-table > ${COMPAT_CACHE_DIR}/VERSION_COMPATIBILITY.md
+
+# Commit to docs branch
+if [[ ! -d ${COMPAT_CACHE_DIR}/docs ]]; then
+  git worktree add ${COMPAT_CACHE_DIR}/docs docs
+fi
+
+cd ${COMPAT_CACHE_DIR}/docs
+git reset --hard HEAD
+git pull --rebase origin docs
+mv ../VERSION_COMPATIBILITY.md .
+git add VERSION_COMPATIBILITY.md
+
+if ! git diff --cached --quiet; then
+  git commit -m "Updating VERSION_COMPATIBILITY.md"
+  git push -u origin docs
+fi

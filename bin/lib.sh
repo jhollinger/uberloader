@@ -1,3 +1,15 @@
+readonly COMPAT_CACHE_DIR=/tmp/uberloader-compatibility-test
+readonly COMPAT_RESULTS_DIR=${COMPAT_CACHE_DIR}/results
+
+function gem_versions {
+  gem info $1 --remote --all --prerelease | awk '$1 == "'$1'"' | sed 's/.*(//' | sed 's/)$//' | sed 's/, /\n/g'
+}
+
+function compat_image_name {
+  suffix=$1
+  echo "uberloader-compat-${suffix}"
+}
+
 function podpose {
   if [[ -n "${PODMAN-}" ]]; then
     podman-compose "$@"
