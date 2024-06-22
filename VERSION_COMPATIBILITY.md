@@ -5,7 +5,7 @@ A version of *HEAD* indicates a test against the latest git commit. The last run
 | ActiveRecord | Uberloader | Status |
 | ------------ | ---------- | ------ |
 | 7.1.3.4 | HEAD | Pass |
-| 7.1.3.4 | 0.1.0 | Fail |
+| 7.1.3.4 | 0.1.0 | Pass |
 | 7.1.3.3 | HEAD | Pass |
 | 7.1.3.3 | 0.1.0 | Fail |
 | 7.1.3.2 | HEAD | Pass |
