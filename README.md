@@ -24,7 +24,9 @@ widgets = Widget
 
 ## On Monkeypatches and Safety
 
-Regretably, none of this is possible without monkeypatching `ActiveRecord::Relation`'s non-public `preload_associations` method. While small, the patch has no guarntee of working in the next minor, or even tiny, patch. To assess its stability, I ran its unit tests against the full matrix of (supported) ActiveRecord and Uberloader versions. They passed consistently, but with predictable clusters of failures around pre-release and X.0.0 versions. Take that as you will.
+Regretably, none of this is possible without monkeypatching `ActiveRecord::Relation`'s non-public `preload_associations` method. While small, the patch has no guarntee of working in the next minor, or even tiny, patch.
+
+To assess its stability over time, I ran Uberloader's unit tests against the full matrix of (supported) ActiveRecord and Uberloader versions. They passed consistently, but with predictable clusters of failures around pre-release and X.0.0 versions. Take that as you will.
 
 I will keep these tests running daily, and against this project's `main` branch as well. [You can find the link to the results here](https://github.com/jhollinger/uberloader/blob/docs/VERSION_COMPATIBILITY.md). If something breaks, I'll try to fix it. If we're lucky, maybe this behavior could get _into_ Rails itself someday...
 
