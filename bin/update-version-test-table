@@ -10,7 +10,8 @@ if [[ $# -eq 0 ]]; then
   git reset --hard HEAD
   git switch main
   git pull --rebase origin main
-  exec bin/update-version-test-table run
+  bin/update-version-test-table run
+  exit
 fi
 
 # Run tests
