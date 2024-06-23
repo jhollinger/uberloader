@@ -2,6 +2,8 @@
 
 A version of *HEAD* indicates a test against the latest git commit. The last run was 2024-06-22.
 
+TESTING
+
 | ActiveRecord | Uberloader | Status |
 | ------------ | ---------- | ------ |
 | 7.1.3.4 | HEAD | Pass |
