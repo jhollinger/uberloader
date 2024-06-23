@@ -18,7 +18,7 @@ A version of *HEAD* indicates a test against the latest git commit. The last run
 | ------------ | ---------- | ------ |"
 
 cat <(
-  for file in $(find $COMPAT_RESULTS_DIR -type f | sort -r); do
+  for file in $(find $COMPAT_RESULTS_DIR -type f); do
     filename=$(basename $file)
     ar_version=$(sed 's/-.*//' <<< $filename)
     ul_version=$(sed 's/^.*-//' <<< $filename)
