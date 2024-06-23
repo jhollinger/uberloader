@@ -3,16 +3,9 @@
 set -euo pipefail
 
 cd $(dirname $0)/../
-source bin/lib.sh
 
-[[ -d $COMPAT_CACHE_DIR ]] || mkdir -p $COMPAT_CACHE_DIR
-[[ -d ${COMPAT_CACHE_DIR}/main ]] || git worktree add ${COMPAT_CACHE_DIR}/main main
-
-# Update
-cd ${COMPAT_CACHE_DIR}/main
 git reset --hard HEAD
 git switch main
 git pull --rebase origin main
 
-# Run tests
 exec bin/update-version-test-table
