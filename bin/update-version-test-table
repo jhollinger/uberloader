@@ -5,6 +5,14 @@ set -euo pipefail
 cd $(dirname $0)/../
 source bin/lib.sh
 
+# Update
+if [[ $# -eq 0 ]]; then
+  git reset --hard HEAD
+  git switch main
+  git pull --rebase origin main
+  exec bin/update-version-test-table run
+fi
+
 # Run tests
 bin/testall-compatibility
 
