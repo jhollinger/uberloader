@@ -1,6 +1,9 @@
 # Uberloader
 
-Uberloader is a new way of preloading associations in ActiveRecord. Nested preloads use blocks. Custom scopes may be given as args and/or as method calls inside a block.
+Uberloader is a new way of preloading associations in ActiveRecord. It works like `preload`, but with the following changes:
+
+* Custom scopes may be given.
+* Nested preloads use blocks.
 
 ```ruby
 widgets = Widget
