@@ -17,6 +17,7 @@ widgets = Widget
     # and their subparts, using a custom scope
     u.uberload(:subparts) do
       u.scope my_subparts_scope_helper
+      u.scope Subpart.where(kind: params[:sub_kinds]) if params[:sub_kinds]&.any?
 
       u.uberload(:foo) do
         u.uberload(:bar)
