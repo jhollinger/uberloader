@@ -1,4 +1,4 @@
-readonly COMPAT_CACHE_DIR=/tmp/uberloader-compatibility-test
+readonly COMPAT_CACHE_DIR=${HOME}/.uberloader-compatibility-test
 readonly COMPAT_RESULTS_DIR=${COMPAT_CACHE_DIR}/results
 
 function gem_versions {
