@@ -1,7 +1,7 @@
 appraise "ar-7.2" do
-  gem "activerecord", "~> 7.2.0.beta2"
+  gem "activerecord", "~> 7.2.1"
   gem "sqlite3", "~> 1.7.3"
-  gem "otr-activerecord", "~> 2.2.0"
+  gem "otr-activerecord", "~> 2.4.0"
 end
 
 appraise "ar-7.1" do
