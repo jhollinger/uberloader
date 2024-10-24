@@ -1,10 +1,13 @@
 # Version Compatibility Matrix
 
-A version of *HEAD* indicates a test against the latest git commit. The last run was 2024-10-23.
+A version of *HEAD* indicates a test against the latest git commit. The last run was 2024-10-24.
 
 | ActiveRecord | Uberloader | Status |
 | ------------ | ---------- | ------ |
 | 7.2.1 | HEAD | Fail |
+| 7.2.1.2 | HEAD | Fail |
+| 7.2.1.2 | 0.2.0 | Pass |
+| 7.2.1.2 | 0.1.0 | Fail |
 | 7.2.1.1 | HEAD | Fail |
 | 7.2.1.1 | 0.2.0 | Pass |
 | 7.2.1.1 | 0.1.0 | Fail |
@@ -26,6 +29,9 @@ A version of *HEAD* indicates a test against the latest git commit. The last run
 | 7.2.0 | 0.2.0 | Pass |
 | 7.2.0 | 0.1.0 | Fail |
 | 7.1.4 | HEAD | Pass |
+| 7.1.4.2 | HEAD | Pass |
+| 7.1.4.2 | 0.2.0 | Pass |
+| 7.1.4.2 | 0.1.0 | Pass |
 | 7.1.4.1 | HEAD | Pass |
 | 7.1.4.1 | 0.2.0 | Pass |
 | 7.1.4.1 | 0.1.0 | Pass |
@@ -65,6 +71,9 @@ A version of *HEAD* indicates a test against the latest git commit. The last run
 | 7.1.0 | 0.2.0 | Pass |
 | 7.1.0 | 0.1.0 | Pass |
 | 7.0.8 | HEAD | Fail |
+| 7.0.8.6 | HEAD | Fail |
+| 7.0.8.6 | 0.2.0 | Pass |
+| 7.0.8.6 | 0.1.0 | Pass |
 | 7.0.8.5 | HEAD | Fail |
 | 7.0.8.5 | 0.2.0 | Pass |
 | 7.0.8.5 | 0.1.0 | Pass |
@@ -180,8 +189,11 @@ A version of *HEAD* indicates a test against the latest git commit. The last run
 | 6.1.7.2 | 0.2.0 | Pass |
 | 6.1.7.2 | 0.1.0 | Pass |
 | 6.1.7.1 | HEAD | Fail |
+| 6.1.7.10 | HEAD | Fail |
 | 6.1.7.1 | 0.2.0 | Pass |
 | 6.1.7.1 | 0.1.0 | Pass |
+| 6.1.7.10 | 0.2.0 | Pass |
+| 6.1.7.10 | 0.1.0 | Pass |
 | 6.1.7 | 0.2.0 | Pass |
 | 6.1.7 | 0.1.0 | Pass |
 | 6.1.6 | HEAD | Fail |
