@@ -9,6 +9,7 @@ module Uberloader
 
   autoload :Preloader,
     case ActiveRecord::VERSION::MAJOR
+    when 8 then 'uberloader/preloader/v8'
     when 7 then 'uberloader/preloader/v7'
     when 6 then 'uberloader/preloader/v6'
     else raise "Unsupported ActiveRecord version"

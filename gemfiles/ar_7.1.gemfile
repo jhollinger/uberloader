@@ -4,10 +4,10 @@ source "https://rubygems.org"
 
 gem "rake"
 gem "appraisal", "~> 2.5"
+gem "minitest"
+gem "database_cleaner"
 gem "activerecord", "~> 7.1.1"
 gem "sqlite3", "~> 1.7.3"
 gem "otr-activerecord", "~> 2.2.0"
-gem "minitest"
-gem "database_cleaner"
 
 gemspec path: "../"
