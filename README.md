@@ -1,35 +1,48 @@
 # Uberloader
 
-Uberloader is a new way of preloading associations in ActiveRecord. It works like `preload`, but with the following changes:
+Uberloader is a new way of preloading associations in ActiveRecord. It behaves like `preload`, but with a lot more power.
 
-* Custom scopes may be given.
-* Nested preloads use blocks.
+#### Install with Bundler
+
+```bash
+bundle add uberloader
+```
+
+#### Nested preloads use blocks
 
 ```ruby
 widgets = Widget
   .where(category_id: category_ids)
-  # Preload category
   .uberload(:category)
-  # Preload parts, ordered by name
-  .uberload(:parts, scope: Part.order(:name)) do |u|
-    # Preload the parts' manufacturer
+  .uberload(:parts) { |u|
     u.uberload(:manufacturer)
-    # and their subparts, using a custom scope
-    u.uberload(:subparts) do
+    u.uberload(:subparts) {
+      u.uberload(:foo) {
+        u.uberload(:bar)
+      }
+    }
+  }
+```
+
+#### Why? So you can customize preload scopes
+
+```ruby
+widgets = Widget
+  .where(category_id: category_ids)
+  .uberload(:category)
+  # specify scope using an argument
+  .uberload(:parts, scope: Part.order(:name)) { |u|
+    u.uberload(:manufacturer)
+    u.uberload(:subparts) {
+      # or using the #scope method
       u.scope my_subparts_scope_helper
       u.scope Subpart.where(kind: params[:sub_kinds]) if params[:sub_kinds]&.any?
 
-      u.uberload(:foo) do
+      u.uberload(:foo) {
         u.uberload(:bar)
-      end
-    end
-  end
-```
-
-Install with Bundler:
-
-```bash
-bundle add uberloader
+      }
+    }
+  }
 ```
 
 ## Interaction with preload and includes
@@ -48,7 +61,7 @@ Regretably, none of this is possible without monkeypatching `ActiveRecord::Relat
 
 To assess its stability over time, I ran Uberloader's unit tests against the full matrix of (supported) ActiveRecord and Uberloader versions. They passed consistently, but with predictable clusters of failures around pre-release and X.0.0 versions.
 
-I will keep these tests running daily, and against this project's `main` branch as well. [You can find the link to the results here](https://github.com/jhollinger/uberloader/blob/docs/VERSION_COMPATIBILITY.md). If something breaks, I'll try to fix it. If we're lucky, maybe this behavior could get _into_ Rails itself someday...
+I will keep these tests running regularly. [You can find the link to the results here](https://github.com/jhollinger/uberloader/blob/docs/VERSION_COMPATIBILITY.md). If something breaks, I'll try to fix it. If we're lucky, maybe this behavior could get _into_ Rails itself someday...
 
 ## Testing
 
