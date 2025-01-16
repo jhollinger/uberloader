@@ -1,6 +1,6 @@
 # Version Compatibility Matrix
 
-A version of *HEAD* indicates a test against the latest git commit. The last run was 2025-01-10.
+A version of *HEAD* indicates a test against the latest git commit. The last run was 2025-01-16.
 
 | ActiveRecord | Uberloader | Status |
 | ------------ | ---------- | ------ |
@@ -125,7 +125,7 @@ A version of *HEAD* indicates a test against the latest git commit. The last run
 | 7.1.0.rc1 | 0.2.0 | Pass |
 | 7.1.0.rc1 | 0.1.0 | Pass |
 | 7.1.0 | HEAD | Pass |
-| 7.1.0.beta1 | HEAD | Pass |
+| 7.1.0.beta1 | HEAD | Fail |
 | 7.1.0.beta1 | 0.3.0 | Pass |
 | 7.1.0.beta1 | 0.2.0 | Pass |
 | 7.1.0.beta1 | 0.1.0 | Pass |
