@@ -12,7 +12,7 @@ fi
 
 echo "# Version Compatibility Matrix
 
-A version of *HEAD* indicates a test against the latest git commit. The last run was $(date '+%Y-%m-%d').
+Last run on $(date '+%Y-%m-%d').
 
 | ActiveRecord | Uberloader | Status |
 | ------------ | ---------- | ------ |"
