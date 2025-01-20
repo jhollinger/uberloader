@@ -17,26 +17,20 @@ readonly uberloader_versions=$(gem_versions uberloader)
 
 function main {
   [[ -d $COMPAT_RESULTS_DIR ]] || mkdir -p $COMPAT_RESULTS_DIR
-  git rev-parse --short HEAD > ${COMPAT_CACHE_DIR}/HEAD.current
-  touch ${COMPAT_CACHE_DIR}/HEAD.prev
 
   for appraised_version in ${appraised_ar_versions[@]}; do
     build_gem_image $appraised_version
-    build_repo_image $appraised_version
   done
 
   for ar_version in ${all_ar_versions[@]}; do
     for appraised_version in ${appraised_ar_versions[@]}; do
       if [[ $ar_version == "${appraised_version}."* ]]; then
-        test_versions $appraised_version $ar_version HEAD
         for ul_version in ${uberloader_versions[@]}; do
           test_versions $appraised_version $ar_version $ul_version
         done
       fi
     done
   done
-
-  cp ${COMPAT_CACHE_DIR}/HEAD.current ${COMPAT_CACHE_DIR}/HEAD.prev
 }
 
 function test_versions {
@@ -46,22 +40,11 @@ function test_versions {
   result_file=${COMPAT_RESULTS_DIR}/${ar_version}-${ul_version}
 
   if [[ ! -f $result_file ]]; then
-    # run tests
-    noop=true
-  elif [[ $ul_version == HEAD ]]; then
-    # run tests if HEAD's current commit hasn't been tested yet
-    current=$(cat ${COMPAT_CACHE_DIR}/HEAD.current)
-    prev=$(cat ${COMPAT_CACHE_DIR}/HEAD.prev)
-    [[ "$current" != "$prev" ]] || return 0
-  else
-    # already run
-    return 0
-  fi
-
-  if bin/test-compatibility $appraised_version $ar_version $ul_version; then
-    printf "Pass" > $result_file
-  else
-    printf "Fail" > $result_file
+    if bin/test-compatibility $appraised_version $ar_version $ul_version; then
+      printf "Pass" > $result_file
+    else
+      printf "Fail" > $result_file
+    fi
   fi
 }
 
@@ -78,20 +61,6 @@ function build_gem_image {
     echo "COPY test /srv/test"
   ) > $dockerfile
   docker build -f $dockerfile -t $(compat_image_name $appraised_version) .
-}
-
-function build_repo_image {
-  appraised_version=$1
-  dockerfile=${COMPAT_CACHE_DIR}/Dockerfile.${appraised_version}.HEAD
-  cat <(
-    cat $dockerfile_base
-    echo "COPY Gemfile Appraisals *.gemspec /srv/"
-    echo "COPY gemfiles /srv/gemfiles"
-    echo "COPY lib/uberloader/version.rb /srv/lib/uberloader/version.rb"
-    echo "RUN bundle install && bundle exec appraisal ar-${appraised_version} bundle install"
-    echo "COPY . /srv/"
-  ) > $dockerfile
-  docker build -f $dockerfile -t $(compat_image_name ${appraised_version}-repo) .
 }
 
 main

@@ -15,9 +15,7 @@ appraised_version=$1
 ar_version=$2
 ul_version=$3
 
-[[ $ul_version == HEAD ]] && suffix="-repo" || suffix=""
-
-docker run --rm $(compat_image_name ${appraised_version}${suffix}) bash -c "
+docker run --rm $(compat_image_name ${appraised_version}) bash -c "
   set -euo pipefail
 
   gemfile=gemfiles/ar_${appraised_version}.gemfile
@@ -30,9 +28,7 @@ docker run --rm $(compat_image_name ${appraised_version}${suffix}) bash -c "
   fi
 
   # Install the right version of uberloader
-  if [[ $ul_version != HEAD ]]; then
-    sed -i 's/^gemspec .*/gem \"uberloader\", \"'$ul_version'\"/' \$gemfile
-  fi
+  sed -i 's/^gemspec .*/gem \"uberloader\", \"'$ul_version'\"/' \$gemfile
 
   bundle exec appraisal ar-${appraised_version} bundle install
   bundle exec appraisal ar-${appraised_version} rake test
