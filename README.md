@@ -101,5 +101,4 @@ bin/generate-version-test-table
 # Run tests for specific versions
 #                      Appraisal  ActiveRecord  Uberloader
 bin/test-compatibility 7.1        7.1.3.2       0.1.0
-bin/test-compatibility 7.1        7.1.3.2       HEAD
 ```
