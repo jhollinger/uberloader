@@ -22,13 +22,14 @@ function main {
     build_gem_image $appraised_version
   done
 
-  for ar_version in ${all_ar_versions[@]}; do
-    for appraised_version in ${appraised_ar_versions[@]}; do
-      if [[ $ar_version == "${appraised_version}."* ]]; then
-        for ul_version in ${uberloader_versions[@]}; do
+  for ul_version in ${uberloader_versions[@]}; do
+    ar_constraints=$(gem_dependency_constraints uberloader $ul_version activerecord)
+    for ar_version in ${all_ar_versions[@]}; do
+      for appraised_version in ${appraised_ar_versions[@]}; do
+        if [[ $ar_version == "${appraised_version}."* ]] && version_satisfies $ar_version "$ar_constraints"; then
           test_versions $appraised_version $ar_version $ul_version
-        done
-      fi
+	fi
+      done
     done
   done
 }

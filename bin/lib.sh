@@ -5,6 +5,46 @@ function gem_versions {
   gem info $1 --remote --all --prerelease | awk '$1 == "'$1'"' | sed 's/.*(//' | sed 's/)$//' | sed 's/, /\n/g'
 }
 
+function gem_dependency_constraints {
+  gem_name=$1
+  gem_v=$2
+  dep_name=$3
+  gem dependency $gem_name -v $gem_v --remote | awk -v "dep=$dep_name" '$1 == dep { sub(/.+\(/, ""); sub(/\)$/, ""); print $0}'
+}
+
+function version_satisfies {
+  V=$1 C="$2" ruby -e '
+    def main
+      version = ENV.fetch("V")
+      constraints = ENV.fetch("C").split(", ")
+      constraints.all? { |c| satisfies? c, version } ? 0 : 1
+    end
+
+    # NOTE handling of pre-release versions probably isnt right
+    def satisfies?(constraint, v)
+      case constraint
+      when /^ *= *(\d.+)/
+        v == $1
+      when /^ *\^ *(\d.+)/
+        v >= $1 && v.split(".")[0].to_i == $1.split(".")[0].to_i
+      when /^ *~ *(\d.+)/
+        v >= $1 && v.split(".")[1].to_i == $1.split(".")[1].to_i
+      when /^ *~> *(\d.+)/
+        c = $1.split "."
+        v = v.split "."
+        n = c.size - 1
+        c[0,n] == v[0,n] && v[n..].join(".") >= c[n..].join(".")
+      when /^ *(>|>=|<|<=) *(\d.+)/
+        v.send($1, $2)
+      else
+        false
+      end
+    end
+
+    exit main
+  '
+}
+
 function compat_image_name {
   suffix=$1
   echo "uberloader-compat-${suffix}"
