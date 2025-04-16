@@ -1,6 +1,6 @@
 # Version Compatibility Matrix
 
-Last run on 2025-04-15.
+Last run on 2025-04-16.
 
 | ActiveRecord | Uberloader | Status |
 | ------------ | ---------- | ------ |
