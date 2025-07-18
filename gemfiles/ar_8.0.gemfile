@@ -7,7 +7,7 @@ gem "appraisal", "~> 2.5"
 gem "minitest"
 gem "database_cleaner"
 gem "activerecord", "~> 8.0.1"
-gem "sqlite3", "~> 2.4.1"
+gem "sqlite3", "~> 2.7.2"
 gem "otr-activerecord", "~> 2.5.0"
 
 gemspec path: "../"
