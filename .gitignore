@@ -1,6 +1,9 @@
+.DS_Store
 *.swp
+/.tool-versions
 /*.gem
 /.bundle
-/gemfiles/.bundle/
+/gemfiles
+/Appraisals
 /Gemfile.lock
 /gemfiles/*.gemfile.lock
