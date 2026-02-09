@@ -10,8 +10,9 @@ if [[ $# -ne 0 ]]; then
   exit 1
 fi
 
-readonly dockerfile_base=compose/Dockerfile.ruby-3.3
-readonly appraisal_file=Appraisals.ruby-3.3
+readonly ruby_version="3.3"
+readonly dockerfile_base=compose/Dockerfile.ruby-${ruby_version}
+readonly appraisal_file=Appraisals.ruby-${ruby_version}
 readonly appraised_ar_versions=($(awk '$1 == "appraise" { gsub("\"", "", $2); print $2 }' < $appraisal_file | sed 's/^ar-//'))
 readonly all_ar_versions=$(gem_versions activerecord)
 readonly uberloader_versions=$(gem_versions uberloader)
@@ -56,7 +57,7 @@ function build_gem_image {
   cat <(
     cat $dockerfile_base
     echo "COPY Gemfile *.gemspec /srv/"
-    echo "COPY Gemfile Appraisals.ruby-${appraised_version} *.gemspec /srv/Appraisals"
+    echo "COPY Gemfile ${appraisal_file} *.gemspec /srv/Appraisals"
     echo "COPY lib/uberloader/version.rb /srv/lib/uberloader/version.rb"
     echo "RUN bundle install && bundle exec appraisal generate && bundle exec appraisal ar-${appraised_version} bundle install"
     echo "COPY Rakefile /srv/Rakefile"
