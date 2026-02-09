@@ -57,7 +57,7 @@ function build_gem_image {
   cat <(
     cat $dockerfile_base
     echo "COPY Gemfile *.gemspec /srv/"
-    echo "COPY Gemfile ${appraisal_file} *.gemspec /srv/Appraisals"
+    echo "COPY ${appraisal_file} /srv/Appraisals"
     echo "COPY lib/uberloader/version.rb /srv/lib/uberloader/version.rb"
     echo "RUN bundle install && bundle exec appraisal generate && bundle exec appraisal ar-${appraised_version} bundle install"
     echo "COPY Rakefile /srv/Rakefile"
